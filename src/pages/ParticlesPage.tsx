@@ -5,66 +5,71 @@ import { loadSlim } from '@tsparticles/slim'
 
 const particlePresets: { id: string; label: string; desc: string; options: any }[] = [
   { 
-    id: 'default', 
-    label: 'Default', 
-    desc: 'Classic particle network',
+    id: 'sparkle', 
+    label: '✨ Sparkle', 
+    desc: 'Glowing sparkle particles that twinkle',
     options: {
       background: { color: { value: 'transparent' } },
       particles: {
-        color: { value: '#ffffff' },
-        links: { color: '#ffffff', distance: 150, enable: true, opacity: 0.3 },
-        move: { enable: true, speed: 2 },
-        number: { value: 80 },
-        opacity: { value: 0.5 },
+        color: { value: ['#ffffff', '#ffe4b5', '#87ceeb', '#dda0dd'] },
+        move: { enable: true, speed: 0.5, direction: 'none', random: true },
+        number: { value: 150 },
+        opacity: { value: { min: 0.1, max: 0.8 }, animation: { enable: true, speed: 2, minimumValue: 0.1 } },
         size: { value: { min: 1, max: 3 } },
-      },
-    }
-  },
-  { 
-    id: 'snow', 
-    label: 'Snow', 
-    desc: 'Falling snow particles',
-    options: {
-      background: { color: { value: 'transparent' } },
-      particles: {
-        color: { value: '#fff' },
-        move: { direction: 'bottom', enable: true, speed: 2, straight: true },
-        number: { value: 100 },
-        opacity: { value: 0.8 },
-        size: { value: { min: 1, max: 4 } },
         shape: { type: 'circle' },
+        shadow: { enable: true, color: '#ffffff', blur: 10 },
+        stroke: { width: 0 },
       },
     }
   },
   { 
-    id: 'stars', 
-    label: 'Stars', 
-    desc: 'Twinkling star field',
+    id: 'fireflies', 
+    label: '🔥 Fireflies', 
+    desc: 'Magical floating firefly particles',
     options: {
       background: { color: { value: 'transparent' } },
       particles: {
-        color: { value: ['#ffd700', '#ff6b6b', '#4ecdc4'] },
-        move: { enable: true, speed: 0.5 },
-        number: { value: 50 },
-        opacity: { value: { min: 0.1, max: 1 }, animation: { enable: true, speed: 1, minimumValue: 0.1 } },
+        color: { value: ['#ffd700', '#ff8c00', '#ffff00'] },
+        move: { enable: true, speed: 0.8, direction: 'none', random: true, straight: false },
+        number: { value: 80 },
+        opacity: { value: { min: 0.2, max: 1 }, animation: { enable: true, speed: 1.5, minimumValue: 0.2 } },
         size: { value: { min: 2, max: 5 } },
-        shape: { type: 'star' },
+        shape: { type: 'circle' },
+        shadow: { enable: true, color: '#ffd700', blur: 15 },
       },
     }
   },
   { 
-    id: 'bubbles', 
-    label: 'Bubbles', 
-    desc: 'Rising bubble effects',
+    id: 'stardust', 
+    label: '🌟 Stardust', 
+    desc: 'Magical cosmic dust particles',
     options: {
       background: { color: { value: 'transparent' } },
       particles: {
-        color: { value: ['#00ffff', '#ff00ff', '#ffff00'] },
-        move: { direction: 'top' as const, enable: true, speed: 2, straight: false },
-        number: { value: 30 },
-        opacity: { value: 0.4 },
-        size: { value: { min: 5, max: 15 } },
+        color: { value: ['#ffd700', '#ff6b6b', '#4ecdc4', '#c0c0c0'] },
+        move: { enable: true, speed: 0.3, direction: 'top', straight: false },
+        number: { value: 100 },
+        opacity: { value: { min: 0.3, max: 1 }, animation: { enable: true, speed: 0.5, minimumValue: 0.3 } },
+        size: { value: { min: 1, max: 4 } },
+        shape: { type: 'star' },
+        shadow: { enable: true, color: '#ffffff', blur: 8 },
+      },
+    }
+  },
+  { 
+    id: 'magic', 
+    label: '🔮 Magic', 
+    desc: 'Enchanted magical particles',
+    options: {
+      background: { color: { value: 'transparent' } },
+      particles: {
+        color: { value: ['#ff00ff', '#00ffff', '#ffff00', '#ff6b6b'] },
+        move: { enable: true, speed: 1, direction: 'none', random: true },
+        number: { value: 120 },
+        opacity: { value: { min: 0.2, max: 0.9 }, animation: { enable: true, speed: 2, minimumValue: 0.2 } },
+        size: { value: { min: 1, max: 3 } },
         shape: { type: 'circle' },
+        shadow: { enable: true, color: '#ff00ff', blur: 20 },
       },
     }
   },
@@ -82,12 +87,28 @@ export default function ParticlesPage() {
 
   return (
     <div style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-      <div style={{ position: 'fixed', top: 100, left: 0, right: 0, bottom: 0, zIndex: 0, pointerEvents: 'none' }}>
+      {/* Background particles - behind everything */}
+      <div style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        bottom: 0, 
+        zIndex: -1, 
+        pointerEvents: 'none',
+        overflow: 'hidden'
+      }}>
         {init && (
           <Particles
             id="tsparticles"
             options={activePreset.options}
-            style={{ position: 'absolute', top: 0, left: 0 }}
+            style={{ 
+              position: 'absolute', 
+              top: 0, 
+              left: 0,
+              width: '100%',
+              height: '100%'
+            }}
           />
         )}
       </div>
@@ -102,7 +123,7 @@ export default function ParticlesPage() {
             ✨ tsParticles
           </h1>
           <p style={{ color: '#888', fontSize: '1.1rem', maxWidth: '600px' }}>
-            Beautiful, lightweight particles library. Click different presets to see animations!
+            Beautiful sparkle particles in the background. Click different presets to see animations!
           </p>
         </motion.div>
 
@@ -150,12 +171,37 @@ export default function ParticlesPage() {
                 padding: '2rem',
                 border: `1px solid ${activePreset.id === preset.id ? 'rgba(240, 219, 79, 0.5)' : 'rgba(255,255,255,0.1)'}`,
                 cursor: 'pointer',
+                backdropFilter: 'blur(10px)',
               }}
             >
               <h3 style={{ color: '#f0db4f', fontSize: '1.3rem', marginBottom: '0.5rem' }}>
                 {preset.label}
               </h3>
               <p style={{ color: '#666', fontSize: '0.9rem' }}>{preset.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Demo cards to show particles behind */}
+        <div style={{ marginTop: '4rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+          {[1, 2, 3, 4].map((i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.15 }}
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '16px',
+                padding: '2rem',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✨</div>
+              <h4 style={{ color: '#fff', marginBottom: '0.5rem' }}>Card {i}</h4>
+              <p style={{ color: '#888', fontSize: '0.85rem' }}>Particles sparkle behind me!</p>
             </motion.div>
           ))}
         </div>
