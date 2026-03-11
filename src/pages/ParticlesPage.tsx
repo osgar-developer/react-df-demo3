@@ -1,117 +1,139 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
-import Particles, { initParticlesEngine } from '@tsparticles/react'
-import { loadSlim } from '@tsparticles/slim'
 
-const particlePresets: { id: string; label: string; desc: string; options: any }[] = [
+interface Sparkle {
+  id: number
+  x: number
+  y: number
+  size: number
+  color: string
+  duration: number
+  delay: number
+}
+
+const colors = ['#ffffff', '#ffe4b5', '#87ceeb', '#dda0dd', '#ffd700', '#ff6b6b', '#4ecdc4', '#00ffff']
+
+function createSparkles(count: number): Sparkle[] {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 4 + 2,
+    color: colors[Math.floor(Math.random() * colors.length)],
+    duration: Math.random() * 3 + 2,
+    delay: Math.random() * 5,
+  }))
+}
+
+function SparkleEffect({ count = 50, style = 'sparkle' }: { count?: number; style?: string }) {
+  const [sparkles, setSparkles] = useState<Sparkle[]>([])
+  
+  useEffect(() => {
+    setSparkles(createSparkles(count))
+  }, [count, style])
+
+  const getAnimation = () => {
+    switch(style) {
+      case 'fireflies':
+        return 'firefly 4s ease-in-out infinite'
+      case 'stardust':
+        return 'stardust 6s linear infinite'
+      case 'magic':
+        return 'magic 3s ease-in-out infinite'
+      default:
+        return 'sparkle 2s ease-in-out infinite'
+    }
+  }
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: -1,
+      overflow: 'hidden',
+      pointerEvents: 'none',
+    }}>
+      <style>{`
+        @keyframes sparkle {
+          0%, 100% { opacity: 0; transform: scale(0); }
+          50% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes firefly {
+          0%, 100% { opacity: 0; transform: translateY(0) scale(0.5); }
+          25% { opacity: 1; transform: translateY(-20px) scale(1); }
+          50% { opacity: 0.5; transform: translateY(-40px) scale(0.8); }
+          75% { opacity: 1; transform: translateY(-60px) scale(1); }
+        }
+        @keyframes stardust {
+          0% { opacity: 0; transform: translateY(100vh) rotate(0deg); }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { opacity: 0; transform: translateY(-100vh) rotate(720deg); }
+        }
+        @keyframes magic {
+          0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); box-shadow: 0 0 0 0 currentColor; }
+          50% { opacity: 1; transform: scale(1) rotate(180deg); box-shadow: 0 0 20px 5px currentColor; }
+        }
+      `}</style>
+      {sparkles.map((s) => (
+        <div
+          key={s.id}
+          style={{
+            position: 'absolute',
+            left: `${s.x}%`,
+            top: `${s.y}%`,
+            width: s.size,
+            height: s.size,
+            borderRadius: '50%',
+            backgroundColor: s.color,
+            boxShadow: `0 0 ${s.size * 2}px ${s.color}`,
+            animation: getAnimation(),
+            animationDuration: `${s.duration}s`,
+            animationDelay: `${s.delay}s`,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+const presets = [
   { 
     id: 'sparkle', 
     label: '✨ Sparkle', 
-    desc: 'Glowing sparkle particles that twinkle',
-    options: {
-      background: { color: { value: 'transparent' } },
-      particles: {
-        color: { value: ['#ffffff', '#ffe4b5', '#87ceeb', '#dda0dd'] },
-        move: { enable: true, speed: 0.5, direction: 'none', random: true },
-        number: { value: 150 },
-        opacity: { value: { min: 0.1, max: 0.8 }, animation: { enable: true, speed: 2, minimumValue: 0.1 } },
-        size: { value: { min: 1, max: 3 } },
-        shape: { type: 'circle' },
-        shadow: { enable: true, color: '#ffffff', blur: 10 },
-        stroke: { width: 0 },
-      },
-    }
+    desc: 'Classic twinkling sparkles',
+    count: 50,
   },
   { 
     id: 'fireflies', 
     label: '🔥 Fireflies', 
-    desc: 'Magical floating firefly particles',
-    options: {
-      background: { color: { value: 'transparent' } },
-      particles: {
-        color: { value: ['#ffd700', '#ff8c00', '#ffff00'] },
-        move: { enable: true, speed: 0.8, direction: 'none', random: true, straight: false },
-        number: { value: 80 },
-        opacity: { value: { min: 0.2, max: 1 }, animation: { enable: true, speed: 1.5, minimumValue: 0.2 } },
-        size: { value: { min: 2, max: 5 } },
-        shape: { type: 'circle' },
-        shadow: { enable: true, color: '#ffd700', blur: 15 },
-      },
-    }
+    desc: 'Magical floating fireflies',
+    count: 30,
   },
   { 
     id: 'stardust', 
     label: '🌟 Stardust', 
-    desc: 'Magical cosmic dust particles',
-    options: {
-      background: { color: { value: 'transparent' } },
-      particles: {
-        color: { value: ['#ffd700', '#ff6b6b', '#4ecdc4', '#c0c0c0'] },
-        move: { enable: true, speed: 0.3, direction: 'top', straight: false },
-        number: { value: 100 },
-        opacity: { value: { min: 0.3, max: 1 }, animation: { enable: true, speed: 0.5, minimumValue: 0.3 } },
-        size: { value: { min: 1, max: 4 } },
-        shape: { type: 'star' },
-        shadow: { enable: true, color: '#ffffff', blur: 8 },
-      },
-    }
+    desc: 'Cosmic falling stars',
+    count: 40,
   },
   { 
     id: 'magic', 
     label: '🔮 Magic', 
     desc: 'Enchanted magical particles',
-    options: {
-      background: { color: { value: 'transparent' } },
-      particles: {
-        color: { value: ['#ff00ff', '#00ffff', '#ffff00', '#ff6b6b'] },
-        move: { enable: true, speed: 1, direction: 'none', random: true },
-        number: { value: 120 },
-        opacity: { value: { min: 0.2, max: 0.9 }, animation: { enable: true, speed: 2, minimumValue: 0.2 } },
-        size: { value: { min: 1, max: 3 } },
-        shape: { type: 'circle' },
-        shadow: { enable: true, color: '#ff00ff', blur: 20 },
-      },
-    }
+    count: 25,
   },
 ]
 
 export default function ParticlesPage() {
-  const [init, setInit] = useState(false)
-  const [activePreset, setActivePreset] = useState(particlePresets[0])
-
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine)
-    }).then(() => setInit(true))
-  }, [])
+  const [activePreset, setActivePreset] = useState(presets[0])
 
   return (
     <div style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto', position: 'relative' }}>
-      {/* Background particles - behind everything */}
-      <div style={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        right: 0, 
-        bottom: 0, 
-        zIndex: -1, 
-        pointerEvents: 'none',
-        overflow: 'hidden'
-      }}>
-        {init && (
-          <Particles
-            id="tsparticles"
-            options={activePreset.options}
-            style={{ 
-              position: 'absolute', 
-              top: 0, 
-              left: 0,
-              width: '100%',
-              height: '100%'
-            }}
-          />
-        )}
-      </div>
+      {/* Background sparkles - behind everything */}
+      <SparkleEffect count={activePreset.count} style={activePreset.id} />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <motion.div
@@ -120,7 +142,7 @@ export default function ParticlesPage() {
           style={{ marginBottom: '4rem' }}
         >
           <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#f0db4f' }}>
-            ✨ tsParticles
+            ✨ Sparkle Particles
           </h1>
           <p style={{ color: '#888', fontSize: '1.1rem', maxWidth: '600px' }}>
             Beautiful sparkle particles in the background. Click different presets to see animations!
@@ -128,7 +150,7 @@ export default function ParticlesPage() {
         </motion.div>
 
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
-          {particlePresets.map((preset) => (
+          {presets.map((preset) => (
             <motion.button
               key={preset.id}
               whileHover={{ scale: 1.05 }}
@@ -156,7 +178,7 @@ export default function ParticlesPage() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
-          {particlePresets.map((preset, i) => (
+          {presets.map((preset, i) => (
             <motion.div
               key={preset.id}
               initial={{ opacity: 0, y: 20 }}
