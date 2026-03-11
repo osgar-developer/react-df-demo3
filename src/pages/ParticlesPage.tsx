@@ -105,25 +105,25 @@ const presets = [
     id: 'sparkle', 
     label: '✨ Sparkle', 
     desc: 'Classic twinkling sparkles',
-    count: 50,
+    count: 80,
   },
   { 
     id: 'fireflies', 
     label: '🔥 Fireflies', 
     desc: 'Magical floating fireflies',
-    count: 30,
+    count: 50,
   },
   { 
     id: 'stardust', 
     label: '🌟 Stardust', 
     desc: 'Cosmic falling stars',
-    count: 40,
+    count: 60,
   },
   { 
     id: 'magic', 
     label: '🔮 Magic', 
     desc: 'Enchanted magical particles',
-    count: 25,
+    count: 40,
   },
 ]
 
@@ -139,12 +139,12 @@ export default function ParticlesPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          style={{ marginBottom: '4rem' }}
+          style={{ marginBottom: '4rem', background: 'rgba(0,0,0,0.2)', padding: '2rem', borderRadius: '16px', backdropFilter: 'blur(3px)' }}
         >
           <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#f0db4f' }}>
             ✨ Sparkle Particles
           </h1>
-          <p style={{ color: '#888', fontSize: '1.1rem', maxWidth: '600px' }}>
+          <p style={{ color: '#aaa', fontSize: '1.1rem', maxWidth: '600px' }}>
             Beautiful sparkle particles in the background. Click different presets to see animations!
           </p>
         </motion.div>
@@ -187,19 +187,19 @@ export default function ParticlesPage() {
               onClick={() => setActivePreset(preset)}
               style={{
                 background: activePreset.id === preset.id 
-                  ? 'rgba(240, 219, 79, 0.15)'
-                  : 'rgba(255,255,255,0.05)',
+                  ? 'rgba(240, 219, 79, 0.1)'
+                  : 'rgba(255,255,255,0.03)',
                 borderRadius: '16px',
                 padding: '2rem',
-                border: `1px solid ${activePreset.id === preset.id ? 'rgba(240, 219, 79, 0.5)' : 'rgba(255,255,255,0.1)'}`,
+                border: `1px solid ${activePreset.id === preset.id ? 'rgba(240, 219, 79, 0.3)' : 'rgba(255,255,255,0.1)'}`,
                 cursor: 'pointer',
-                backdropFilter: 'blur(10px)',
+                backdropFilter: 'blur(5px)',
               }}
             >
               <h3 style={{ color: '#f0db4f', fontSize: '1.3rem', marginBottom: '0.5rem' }}>
                 {preset.label}
               </h3>
-              <p style={{ color: '#666', fontSize: '0.9rem' }}>{preset.desc}</p>
+              <p style={{ color: '#aaa', fontSize: '0.9rem' }}>{preset.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -213,17 +213,17 @@ export default function ParticlesPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.15 }}
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
+                background: 'rgba(255, 255, 255, 0.03)',
                 borderRadius: '16px',
                 padding: '2rem',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(3px)',
                 textAlign: 'center',
               }}
             >
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✨</div>
               <h4 style={{ color: '#fff', marginBottom: '0.5rem' }}>Card {i}</h4>
-              <p style={{ color: '#888', fontSize: '0.85rem' }}>Particles sparkle behind me!</p>
+              <p style={{ color: '#aaa', fontSize: '0.85rem' }}>Particles sparkle behind me!</p>
             </motion.div>
           ))}
         </div>
