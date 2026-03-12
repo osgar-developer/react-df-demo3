@@ -139,7 +139,7 @@ export default function ParticlesPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          style={{ marginBottom: '4rem', background: 'rgba(0,0,0,0.2)', padding: '2rem', borderRadius: '16px', backdropFilter: 'blur(3px)' }}
+          style={{ marginBottom: '4rem' }}
         >
           <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#f0db4f' }}>
             ✨ Sparkle Particles
@@ -186,14 +186,11 @@ export default function ParticlesPage() {
               transition={{ delay: i * 0.1 }}
               onClick={() => setActivePreset(preset)}
               style={{
-                background: activePreset.id === preset.id 
-                  ? 'rgba(240, 219, 79, 0.1)'
-                  : 'rgba(255,255,255,0.03)',
+                background: 'transparent',
                 borderRadius: '16px',
                 padding: '2rem',
-                border: `1px solid ${activePreset.id === preset.id ? 'rgba(240, 219, 79, 0.3)' : 'rgba(255,255,255,0.1)'}`,
+                border: `1px solid ${activePreset.id === preset.id ? 'rgba(240, 219, 79, 0.5)' : 'rgba(255,255,255,0.1)'}`,
                 cursor: 'pointer',
-                backdropFilter: 'blur(5px)',
               }}
             >
               <h3 style={{ color: '#f0db4f', fontSize: '1.3rem', marginBottom: '0.5rem' }}>
@@ -213,11 +210,10 @@ export default function ParticlesPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.15 }}
               style={{
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'transparent',
                 borderRadius: '16px',
                 padding: '2rem',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                backdropFilter: 'blur(3px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 textAlign: 'center',
               }}
             >
